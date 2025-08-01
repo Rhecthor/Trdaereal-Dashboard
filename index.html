@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShipTrack - Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>   
+    <!-- Preloader -->
+    <div id="preloader" class="preloader">
+        <div class="loader">
+            <div class="spinner"></div>
+            <p>Loading Dashboard...</p>
+        </div>
+    </div>
+
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>Trade<span>Real</span></h1>
+            </div>
+            
+            <div class="admin-panel">
+                <h4>Shipment Control</h4>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="#dashboard" class="nav-item active" data-page="dashboard">
+                    <i class="bi bi-speedometer2"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#orders" class="nav-item" data-page="orders">
+                    <i class="bi bi-box-seam"></i>
+                    <span>Orders</span>
+                    <span class="badge" id="newOrdersBadge">12</span>
+                </a>
+                <a href="#shipments" class="nav-item" data-page="shipments">
+                    <i class="bi bi-truck"></i>
+                    <span>Active Shipments</span>
+                </a>
+                <a href="#tracking" class="nav-item" data-page="tracking">
+                    <i class="bi bi-geo-alt"></i>
+                    <span>Live Tracking</span>
+                </a>
+                <a href="#delivery" class="nav-item" data-page="delivery">
+                    <i class="bi bi-check-circle"></i>
+                    <span>Deliveries</span>
+                </a>
+                <a href="#customers" class="nav-item" data-page="customers">
+                    <i class="bi bi-people"></i>
+                    <span>Customers</span>
+                </a>
+                <a href="#analytics" class="nav-item" data-page="analytics">
+                    <i class="bi bi-graph-up"></i>
+                    <span>Analytics</span>
+                </a>
+                <a href="#settings" class="nav-item" data-page="settings">
+                    <i class="bi bi-gear"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+            
+            <div class="insights-section">
+                <h4>Alerts</h4>
+                <a href="#alerts" class="nav-item" data-page="alerts">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    <span>Delayed Shipments</span>
+                    <span class="badge warning">3</span>
+                </a>
+                <a href="#notifications" class="nav-item" data-page="notifications">
+                    <i class="bi bi-bell"></i>
+                    <span>Notifications</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="search-bar">
+                    <i class="bi bi-search"></i>
+                    <input type="text" placeholder="Search orders, tracking numbers..." id="globalSearch">
+                </div>
+                <div class="header-right">
+                    <div class="quick-actions">
+                        <button class="action-btn" onclick="addNewOrder()">
+                            <i class="bi bi-plus-circle"></i>
+                            New Order
+                        </button>
+                        <button class="action-btn" onclick="bulkUpdate()">
+                            <i class="bi bi-arrow-repeat"></i>
+                            Bulk Update
+                        </button>
+                    </div>
+                    <div class="notifications">
+                        <i class="bi bi-bell"></i>
+                        <span class="notification-dot"></span>
+                    </div>
+                    <div class="profile">
+                        <img src="https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop&crop=face" alt="Admin">
+                        <div class="profile-info">
+                            <span class="name">Admin</span>
+                            <span class="role">Shipment Manager</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Page -->
+            <div id="dashboard" class="page active">
+                <!-- Key Metrics -->
+                <section class="metrics-overview">
+                    <div class="section-header">
+                        <h2>Shipment Overview</h2>
+                        <div class="time-filter">
+                            <select id="timeframe">
+                                <option value="today">Today</option>
+                                <option value="week">This Week</option>
+                                <option value="month">This Month</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-icon pending">
+                                <i class="bi bi-clock"></i>
+                            </div>
+                            <div class="metric-details">
+                                <h3>Pending Orders</h3>
+                                <div class="metric-value" id="pendingOrders">247</div>
+                                <div class="metric-change positive">+12 today</div>
+                            </div>
+                        </div>
+                        
+                        <div class="metric-card">
+                            <div class="metric-icon processing">
+                                <i class="bi bi-box-seam"></i>
+                            </div>
+                            <div class="metric-details">
+                                <h3>Processing</h3>
+                                <div class="metric-value" id="processingOrders">89</div>
+                                <div class="metric-change neutral">Same as yesterday</div>
+                            </div>
+                        </div>
+                        
+                        <div class="metric-card">
+                            <div class="metric-icon shipped">
+                                <i class="bi bi-truck"></i>
+                            </div>
+                            <div class="metric-details">
+                                <h3>In Transit</h3>
+                                <div class="metric-value" id="shippedOrders">156</div>
+                                <div class="metric-change positive">+8 today</div>
+                            </div>
+                        </div>
+                        
+                        <div class="metric-card">
+                            <div class="metric-icon delivered">
+                                <i class="bi bi-check-circle"></i>
+                            </div>
+                            <div class="metric-details">
+                                <h3>Delivered</h3>
+                                <div class="metric-value" id="deliveredOrders">342</div>
+                                <div class="metric-change positive">+23 today</div>
+                            </div>
+                        </div>
+                        
+                        <div class="metric-card">
+                            <div class="metric-icon delayed">
+                                <i class="bi bi-exclamation-triangle"></i>
+                            </div>
+                            <div class="metric-details">
+                                <h3>Delayed</h3>
+                                <div class="metric-value" id="delayedOrders">12</div>
+                                <div class="metric-change negative">+3 today</div>
+                            </div>
+                        </div>
+                        
+                        <div class="metric-card">
+                            <div class="metric-icon revenue">
+                                <i class="bi bi-currency-dollar"></i>
+                            </div>
+                            <div class="metric-details">
+                                <h3>Revenue</h3>
+                                <div class="metric-value" id="totalRevenue">$45,230</div>
+                                <div class="metric-change positive">+15.2%</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="dashboard-grid">
+                    <!-- Shipment Status Charts Section -->
+                    <section class="chart-section">
+                        <div class="section-header">
+                            <h2>Shipment Status Distribution</h2>
+                        </div>
+                        <div class="chart-card chart-multi" style="width:100%;">
+                            <div class="charts-row">
+                                <canvas id="shipmentChart" width="240" height="240"></canvas>
+                                <canvas id="successRateChart" width="240" height="240"></canvas>
+                                <canvas id="avgDeliveryChart" width="240" height="240"></canvas>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Live Map Section -->
+                <section class="map-section">
+                    <div class="section-header">
+                        <h2>Live Shipment Tracking</h2>
+                        <div class="map-controls">
+                            <button class="map-btn active" data-view="all">All Shipments</button>
+                            <button class="map-btn" data-view="delayed">Delayed Only</button>
+                            <button class="map-btn" data-view="priority">Priority</button>
+                        </div>
+                    </div>
+                    <div class="map-chart-row">
+                        <div class="big-chart-container" style="flex: 1 1 100%; width: 100%; min-width: 0;">
+                            <canvas id="bigRealtimeChart" width="900" height="400"></canvas>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Orders Page -->
+            <div id="orders" class="page">
+                <div class="page-header">
+                    <h1>Order Management</h1>
+                    <div class="page-actions">
+                        <button class="btn-secondary" onclick="exportOrders()">
+                            <i class="bi bi-download"></i> Export
+                        </button>
+                        <button class="btn-primary" onclick="addNewOrder()">
+                            <i class="bi bi-plus"></i> New Order
+                        </button>
+                    </div>
+                </div>
+
+                <div class="filters-section">
+                    <div class="filter-group">
+                        <select id="statusFilter">
+                            <option value="">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="processing">Processing</option>
+                            <option value="shipped">Shipped</option>
+                            <option value="delivered">Delivered</option>
+                        </select>
+                        <select id="priorityFilter">
+                            <option value="">All Priority</option>
+                            <option value="high">High</option>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                        <input type="date" id="dateFilter">
+                        <button class="btn-secondary" onclick="clearFilters()">Clear</button>
+                    </div>
+                </div>
+
+                <div class="orders-table-container">
+                    <table class="orders-table" id="ordersTable">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="selectAll"></th>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Product</th>
+                                <th>Status</th>
+                                <th>Priority</th>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody">
+                            <!-- Orders will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Shipments Page -->
+            <div id="shipments" class="page">
+                <div class="page-header">
+                    <h1>Active Shipments</h1>
+                    <div class="shipment-stats">
+                        <span class="stat">156 In Transit</span>
+                        <span class="stat">23 Out for Delivery</span>
+                        <span class="stat">12 Delayed</span>
+                    </div>
+                </div>
+
+                <div class="shipments-grid" id="shipmentsGrid">
+                    <!-- Shipment cards will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Live Tracking Page -->
+            <div id="tracking" class="page">
+                <div class="page-header">
+                    <h1>Live Tracking</h1>
+                    <div class="tracking-search">
+                        <input type="text" placeholder="Enter tracking number..." id="trackingInput">
+                        <button class="btn-primary" onclick="trackShipment()">Track</button>
+                    </div>
+                </div>
+
+                <div class="tracking-results" id="trackingResults">
+                    <!-- Tracking results will be displayed here -->
+                </div>
+            </div>
+
+            <!-- Deliveries Page -->
+            <div id="delivery" class="page">
+                <div class="page-header">
+                    <h1>Delivery Management</h1>
+                    <div class="delivery-stats">
+                        <div class="stat-item">
+                            <span class="number">342</span>
+                            <span class="label">Delivered Today</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="number">98.5%</span>
+                            <span class="label">Success Rate</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="delivery-timeline" id="deliveryTimeline">
+                    <!-- Delivery timeline will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Analytics Page -->
+            <div id="analytics" class="page">
+                <div class="page-header">
+                    <h1>Shipment Analytics</h1>
+                    <div class="analytics-controls">
+                        <select id="analyticsTimeframe">
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                            <option value="quarter">This Quarter</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <h3>Delivery Performance</h3>
+                        <div class="chart-container">
+                            <canvas id="performanceChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="analytics-card">
+                        <h3>Shipping Costs</h3>
+                        <div class="chart-container">
+                            <canvas id="costsChart"></canvas>
+                        </div>
+                    </div>
+                    <!-- New Chart: Customer Growth -->
+                    <div class="analytics-card">
+                        <h3>Customer Growth</h3>
+                        <div class="chart-container">
+                            <canvas id="customerGrowthChart"></canvas>
+                        </div>
+                    </div>
+                    <!-- New Chart: Returns Rate -->
+                    <div class="analytics-card">
+                        <h3>Returns Rate</h3>
+                        <div class="chart-container">
+                            <canvas id="returnsRateChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Other pages placeholders -->
+            <div id="customers" class="page">
+                <h1>Customer Management</h1>
+                <p>Manage customer information and shipping preferences.</p>
+            </div>
+
+            <div id="settings" class="page">
+                <h1>Settings</h1>
+                <div class="settings-section">
+                    <!-- Profile Edit -->
+                    <h2>Edit Profile</h2>
+                    <form id="profileForm" class="settings-form">
+                        <div class="form-group">
+                            <label for="profileName">Name</label>
+                            <input type="text" id="profileName" value="Admin" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="profileEmail">Email</label>
+                            <input type="email" id="profileEmail" value="admin@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="profileRole">Role</label>
+                            <input type="text" id="profileRole" value="Shipment Manager" required>
+                        </div>
+                        <button type="submit" class="btn-primary">Save Changes</button>
+                    </form>
+
+                    <!-- Dashboard Preferences -->
+                    <h2>Dashboard Preferences</h2>
+                    <form id="dashboardPrefsForm" class="settings-form">
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="darkModeToggle">
+                                Enable Dark Mode
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="showNotificationsToggle" checked>
+                                Show Notifications
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="defaultPage">Default Landing Page</label>
+                            <select id="defaultPage">
+                                <option value="dashboard">Dashboard</option>
+                                <option value="orders">Orders</option>
+                                <option value="shipments">Shipments</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-primary">Save Preferences</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="alerts" class="page">
+                <h1>Delayed Shipments</h1>
+                <p>Monitor and manage delayed shipments.</p>
+            </div>
+
+            <div id="notifications" class="page">
+                <h1>Notifications</h1>
+                <p>Manage notification preferences and alerts.</p>
+                <div class="notifications-list" id="notificationsList"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Order Modal -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Order Details</h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body" id="orderModalBody">
+                <!-- Order details will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <div id="dashboardOrders"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <script src="chart.js"></script>
+</body>
+</html>
